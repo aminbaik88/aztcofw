@@ -54,9 +54,9 @@ if [ -f ${BUILD_CONF} ]; then
 fi
 
 # Define pfSense versions
-PKG_REPO_BRANCH_DEVEL="devel"
+#PKG_REPO_BRANCH_DEVEL="devel"
 #PKG_REPO_BRANCH_NEXT="v2_7_0"
-PKG_REPO_BRANCH_RELEASE="v2_6_0"
+PKG_REPO_BRANCH_RELEASE="v2_7_0"
 PKG_REPO_BRANCH_PREVIOUS="v2_5_2"
 
 # Make sure pkg will not be interactive
@@ -73,13 +73,13 @@ if [ ! -d ${SCRATCHDIR} ]; then
 fi
 
 # Product details
-export PRODUCT_NAME=${PRODUCT_NAME:-"nonSense"}
+export PRODUCT_NAME=${PRODUCT_NAME:-"AZTCOFW"}
 export PRODUCT_NAME_SUFFIX=${PRODUCT_NAME_SUFFIX:-"-CE"}
 export REPO_BRANCH_PREFIX=${REPO_BRANCH_PREFIX:-""}
 export REPO_PATH_PREFIX=$(echo "${REPO_BRANCH_PREFIX}" | sed -e 's,-,_,g')
-export PRODUCT_URL=${PRODUCT_URL:-""}
+export PRODUCT_URL=${PRODUCT_URL:-"https://aztcofirewall.sy"}
 export PRODUCT_SRC=${PRODUCT_SRC:-"${BUILDER_ROOT}/src"}
-export PRODUCT_EMAIL=${PRODUCT_EMAIL:-"coreteam@pfsense.org"}
+export PRODUCT_EMAIL=${PRODUCT_EMAIL:-"core@aztcofirewall.sy"}
 export XML_ROOTOBJ=${XML_ROOTOBJ:-$(echo "${PRODUCT_NAME}" | tr '[[:upper:]]' '[[:lower:]]')}
 
 if [ "${PRODUCT_NAME}" = "pfSense" -a "${BUILD_AUTHORIZED_BY_NETGATE}" != "yes" ]; then
@@ -114,9 +114,9 @@ POUDRIERE_BRANCH=$(echo "${GIT_REPO_BRANCH_OR_TAG}" | sed 's,RELENG_,v,; s,\.,_,
 GIT_REPO_BASE=$(git -C ${BUILDER_ROOT} config --get remote.$(git -C ${BUILDER_ROOT} remote).url | sed -e 's,/[^/]*$,,')
 
 # This is used for using svn for retrieving src
-export FREEBSD_REPO_BASE=${FREEBSD_REPO_BASE:-"${GIT_REPO_BASE}/freebsd-src.git"}
-export FREEBSD_BRANCH=${FREEBSD_BRANCH:-"${REPO_BRANCH_PREFIX}devel-12"}
-export FREEBSD_SRC_DIR=${FREEBSD_SRC_DIR:-"${SCRATCHDIR}/FreeBSD-src"}
+export FREEBSD_REPO_BASE=${FREEBSD_REPO_BASE:-"${GIT_REPO_BASE}/aztcofw-src.git"}
+export FREEBSD_BRANCH=${FREEBSD_BRANCH:-"${REPO_BRANCH_PREFIX}RELENG_2_7_0"}
+export FREEBSD_SRC_DIR=${FREEBSD_SRC_DIR:-"${SCRATCHDIR}/aztcofw-src"}
 
 export BUILD_KERNELS=${BUILD_KERNELS:-"${PRODUCT_NAME}"}
 
@@ -222,11 +222,11 @@ export ZFS_ROOT=${ZFS_ROOT:-"/poudriere"}
 
 export POUDRIERE_BULK=${POUDRIERE_BULK:-"${BUILDER_TOOLS}/conf/pfPorts/poudriere_bulk"}
 if [ -z "${REPO_BRANCH_PREFIX}" ]; then
-	export POUDRIERE_PORTS_GIT_URL=${POUDRIERE_PORTS_GIT_URL:-"${GIT_REPO_BASE}/freebsd-ports.git"}
+	export POUDRIERE_PORTS_GIT_URL=${POUDRIERE_PORTS_GIT_URL:-"${GIT_REPO_BASE}/aztcofw-ports.git"}
 else
 	export POUDRIERE_PORTS_GIT_URL=${POUDRIERE_PORTS_GIT_URL:-"${GIT_REPO_BASE}/${REPO_BRANCH_PREFIX}ports.git"}
 fi
-export POUDRIERE_PORTS_GIT_BRANCH=${POUDRIERE_PORTS_GIT_BRANCH:-"${REPO_BRANCH_PREFIX}devel"}
+export POUDRIERE_PORTS_GIT_BRANCH=${POUDRIERE_PORTS_GIT_BRANCH:-"${REPO_BRANCH_PREFIX}RELENG_2_7_0"}
 
 # Use vX_Y instead of RELENG_X_Y for poudriere to make it shorter
 POUDRIERE_PORTS_BRANCH=$(echo "${POUDRIERE_PORTS_GIT_BRANCH}" | sed 's,RELENG_,v,; s,-,_,g')
@@ -320,7 +320,7 @@ export CORE_PKG_REAL_PATH="${CORE_PKG_PATH}/.real_${DATESTRING}"
 export CORE_PKG_ALL_PATH="${CORE_PKG_PATH}/All"
 
 export PKG_REPO_BASE=${PKG_REPO_BASE:-"${BUILDER_TOOLS}/templates/pkg_repos"}
-export PFSENSE_DEFAULT_REPO="${PRODUCT_NAME}-repo-devel"
+export PFSENSE_DEFAULT_REPO="${PRODUCT_NAME}-repo-2_7_0"
 export PKG_REPO_DEFAULT=${PKG_REPO_DEFAULT:-"${PKG_REPO_BASE}/${PFSENSE_DEFAULT_REPO}.conf"}
 export PFSENSE_BUILD_REPO="${PFSENSE_DEFAULT_REPO}"
 export PKG_REPO_BUILD=${PKG_REPO_BUILD:-"${PKG_REPO_BASE}/${PFSENSE_BUILD_REPO}.conf"}
@@ -370,9 +370,9 @@ else
 fi
 
 if [ "${PRODUCT_NAME}" = "pfSense" ]; then
-	export VENDOR_NAME=${VENDOR_NAME:-"Rubicon Communications, LLC (Netgate)"}
-	export OVF_INFO=${OVF_INFO:-"pfSense is a free, open source customized distribution of FreeBSD tailored for use as a firewall and router. In addition to being a powerful, flexible firewalling and routing platform, it includes a long list of related features and a package system allowing further expandability without adding bloat and potential security vulnerabilities to the base distribution. pfSense is a popular project with more than 1 million downloads since its inception, and proven in countless installations ranging from small home networks protecting a PC and an Xbox to large corporations, universities and other organizations protecting thousands of network devices."}
+	export VENDOR_NAME=${VENDOR_NAME:-"Amin ElZein Trading (AZTCO)"}
+	export OVF_INFO=${OVF_INFO:-"AZTCO Firewall "}
 else
-	export VENDOR_NAME=${VENDOR_NAME:-"nonSense"}
+	export VENDOR_NAME=${VENDOR_NAME:-"AZTCOFW}
 	export OVF_INFO=${OVF_INFO:-"none"}
 fi
